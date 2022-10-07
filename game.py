@@ -27,7 +27,14 @@ def games_per_team(n_teams):
         num_games_per_team = (n_teams - 1) * int(n_rounds)
         print(f'Number of games per team: {num_games_per_team}')
         print(f'Number of rounds to play: {n_rounds}')
-        return num_games_per_team, int(n_rounds)
+
+        # Calculate the max number of win in the tournament among all teams
+        # Apply n(n+1) / 2
+        total_wins = 0
+        for i in range(num_games_per_team, 0, -1*int(n_rounds)):
+            total_wins += i
+        print(total_wins)
+        return num_games_per_team, int(n_rounds), total_wins
 
 def generate_teams(n_teams):
     teams_list = []
@@ -55,24 +62,13 @@ def main():
     while run:
         # Determine the number of teams, rounds and games.
         n_teams = number_teams()
-        number_games_per_team, n_rounds = games_per_team(n_teams)
+        number_games_per_team, n_rounds, total_wins = games_per_team(n_teams)
         
         # Name each team and validate their names.
         teams_list = generate_teams(n_teams)
-        #team_list = []   
-        #n = 1
-        #while n <= n_teams:
-        #    team_name = input(f"Enter the name for Team {n}:  ")
-        #    if not name_validation(team_name):
-        #        continue
-        #    team_list.append([team_name, 0])
-        #    n += 1
 
         # Calculate how total wins are possible among all the teams.
-        total_wins = 0
-        for i in range(number_games_per_team, 0, -1*n_rounds):
-            total_wins += i
-        print(total_wins)
+
         
         # How many wins per team and validate their wins.
         max_wins = number_games_per_team
