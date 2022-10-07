@@ -1,16 +1,44 @@
 # Version 2
-a = 2
-b = 3
+
 import time
 
-def n_teams_validation(n_teams):
-    if not isinstance(n_teams, int):
-        print("Invalid input. Please, enter an integer.")
-        return False
-    if n_teams <= 2:
-        print("Invalid input. There must be at least 2 teams.")
-        return False
-    return True
+def number_teams():
+    while True:
+        n_teams = input("Enter the number of teams:  ")
+        
+        if not n_teams.isdigit():
+            print("Invalid input. Please, enter an integer.")
+            continue
+        if int(n_teams) < 2:
+            print("Invalid input. There must be at least 2 teams in the tournament.")
+            continue
+        return int(n_teams)
+
+def games_per_team(n_teams):
+    while True:
+        n_rounds = input("Enter the number of rounds:  ")
+        
+        if not n_rounds.isdigit():
+            print("Invalid input. Please, enter a digit.")
+            continue
+        if int(n_rounds) < 1:
+            print("Invalid input. There must be at least 1 round in the tournament.")
+            continue
+        num_games_per_team = (n_teams - 1) * int(n_rounds)
+        print(f'Number of games per team: {num_games_per_team}')
+        print(f'Number of rounds to play: {n_rounds}')
+        return num_games_per_team, int(n_rounds)
+
+def generate_teams(n_teams):
+    teams_list = []
+    n = 1
+    while n <= n_teams:
+        team_name = input(f"Enter the name for Team {n}:  ")
+        if not name_validation(team_name):
+            continue
+        teams_list.append([team_name, 0])
+        n += 1
+    return teams_list
 
 def name_validation(team_name):
     if len(team_name.split(' ')) > 2:
@@ -26,32 +54,29 @@ def main():
     run = True
     while run:
         # Determine the number of teams, rounds and games.
-        n_teams = int(input("Enter number of teams:  "))
-        if not n_teams_validation(n_teams):
-            continue
-        n_rounds = int(input("Enter the number of rounds to be played: "))
-        total_number_games_per_team = (n_teams - 1) * n_rounds
-        print("Total number of games per team: ", total_number_games_per_team)
+        n_teams = number_teams()
+        number_games_per_team, n_rounds = games_per_team(n_teams)
         
         # Name each team and validate their names.
-        team_list = []   
-        n = 1
-        while n <= n_teams:
-            team_name = input(f"Enter the name for Team {n}:  ")
-            if not name_validation(team_name):
-                continue
-            team_list.append([team_name, 0])
-            n += 1
+        teams_list = generate_teams(n_teams)
+        #team_list = []   
+        #n = 1
+        #while n <= n_teams:
+        #    team_name = input(f"Enter the name for Team {n}:  ")
+        #    if not name_validation(team_name):
+        #        continue
+        #    team_list.append([team_name, 0])
+        #    n += 1
 
         # Calculate how total wins are possible among all the teams.
         total_wins = 0
-        for i in range(total_number_games_per_team, 0, -1*n_rounds):
+        for i in range(number_games_per_team, 0, -1*n_rounds):
             total_wins += i
         print(total_wins)
         
         # How many wins per team and validate their wins.
-        max_wins = total_number_games_per_team
-        for team_k in team_list:
+        max_wins = number_games_per_team
+        for team_k in teams_list:
             v = True
             while v:
                 while True:
@@ -73,14 +98,14 @@ def main():
                 print(total_wins, max_wins, n_wins)
                 break
         
-        team_list.sort(key=lambda x: x[1], reverse=False)
+        teams_list.sort(key=lambda x: x[1], reverse=False)
         
         print("Generating the games to be played in the first round of the tournament...")
         time.sleep(2)
-        for i in range(len(team_list)//2):
-            t1 = (team_list)[i][0]
-            t2 = (team_list)[-1*(i + 1)][0]
+        for i in range(len(teams_list)//2):
+            t1 = (teams_list)[i][0]
+            t2 = (teams_list)[-1*(i + 1)][0]
             print(f'{t1} vs. {t2}')
-        print(team_list)
+        print(teams_list)
         
 main()
