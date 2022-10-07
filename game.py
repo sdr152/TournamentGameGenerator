@@ -1,3 +1,6 @@
+# Version 2
+a = 2
+b = 3
 import time
 
 def n_teams_validation(n_teams):
