@@ -69,16 +69,6 @@ def main():
 
                 print(total_wins, max_wins, n_wins)
                 break
-
-                #if n_wins <= max_wins:
-                #    team_k[1] = n_wins
-                #    total_wins -= n_wins
-                #    if n_wins == max_wins:
-                #        max_wins -= 1 * n_rounds
-                #    if total_wins < max_wins:
-                #        max_wins = total_wins
-                #    print(total_wins, max_wins, n_wins)
-                #    break
         
         team_list.sort(key=lambda x: x[1], reverse=False)
         
@@ -90,5 +80,4 @@ def main():
             print(f'{t1} vs. {t2}')
         print(team_list)
         
-
 main()
