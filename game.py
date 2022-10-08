@@ -84,7 +84,7 @@ def get_team_wins(teams_list, number_games_per_team, total_possible_wins, n_roun
 
             print(total_possible_wins, max_wins, n_wins)
             break
-        return team_wins
+    return team_wins
 
 def main():
     run = True
@@ -106,5 +106,7 @@ def main():
             t1 = (team_wins)[i][0]
             t2 = (team_wins)[-1*(i + 1)][0]
             print(f'{t1} vs. {t2}')
-        print(team_wins)   
+        print(team_wins)
+        ans = input("Do you wish to start again?  ").lower()   
+        run = (ans == "y" or ans == 'yes')
 main()
