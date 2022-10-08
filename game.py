@@ -36,7 +36,7 @@ def tournament_info(n_teams):
         total_possible_wins = 0
         for i in range(num_games_per_team, 0, -1*int(n_rounds)):
             total_possible_wins += i
-        print(total_possible_wins)
+        print(f'Total possible wins: {total_possible_wins}')
         return num_games_per_team, int(n_rounds), total_possible_wins
 
 def generate_teams(n_teams):
