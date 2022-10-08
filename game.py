@@ -12,6 +12,9 @@ def number_teams():
         if int(n_teams) < 2:
             print("Invalid input. There must be at least 2 teams in the tournament.")
             continue
+        if int(n_teams) % 2 != 0:
+            print("Invalid input. There must be an even number of teams.")
+            continue
         return int(n_teams)
 
 def tournament_info(n_teams):
@@ -43,7 +46,7 @@ def generate_teams(n_teams):
         team_name = input(f"Enter the name for Team {n}:  ")
         if not name_validation(team_name):
             continue
-        teams_list.append([team_name, 0])
+        teams_list.append(team_name)
         n += 1
     return teams_list
 
@@ -57,6 +60,32 @@ def name_validation(team_name):
         return False
     return True
 
+def get_team_wins(teams_list, number_games_per_team, total_possible_wins, n_rounds):
+    team_wins = []
+    max_wins = number_games_per_team
+
+    for tm in teams_list:
+        run = True
+        while run:
+            n_wins = input(f"Enter the number of wins Team {tm} had:  ")
+            if not n_wins.isdigit():
+                print('1. Invalid input. Please, enter a positive integer.')
+                continue
+            n_wins = int(n_wins)
+            if n_wins > max_wins:
+                print(f'Invalid input. Only {max_wins} number of wins available.')
+                continue
+            team_wins.append((tm, n_wins))
+            total_possible_wins -= n_wins
+            if n_wins == max_wins:
+                max_wins -= 1 * n_rounds
+            if total_possible_wins < max_wins:
+                max_wins = total_possible_wins
+
+            print(total_possible_wins, max_wins, n_wins)
+            break
+        return team_wins
+
 def main():
     run = True
     while run:
@@ -68,37 +97,14 @@ def main():
         teams_list = generate_teams(n_teams)
 
         # How many wins per team and validate their wins.
-        max_wins = number_games_per_team
-        for team_k in teams_list:
-            v = True
-            while v:
-                
-                n_wins = input(f"Enter the number of wins Team {team_k[0]} had:  ")
-                if not n_wins.isdigit():
-                    print('Invalid input. Try again.')
-                    continue
-                n_wins = int(n_wins)
-                if n_wins > max_wins:
-                    print('Invalid input. Try again.')
-                    continue
-                team_k[1] = n_wins
-                total_possible_wins -= n_wins
-                if n_wins == max_wins:
-                    max_wins -= 1 * n_rounds
-                if total_possible_wins < max_wins:
-                    max_wins = total_possible_wins
-
-                print(total_possible_wins, max_wins, n_wins)
-                break
+        team_wins = get_team_wins(teams_list, number_games_per_team, total_possible_wins, n_rounds)
+        team_wins.sort(key=lambda x: x[1], reverse=False)
         
-        teams_list.sort(key=lambda x: x[1], reverse=False)
-        
-        print("Generating the games to be played in the first round of the tournament...")
+        print("Generating the games to be played in the first round of the tournament...\n")
         time.sleep(2)
         for i in range(len(teams_list)//2):
-            t1 = (teams_list)[i][0]
-            t2 = (teams_list)[-1*(i + 1)][0]
+            t1 = (team_wins)[i][0]
+            t2 = (team_wins)[-1*(i + 1)][0]
             print(f'{t1} vs. {t2}')
-        print(teams_list)
-        
+        print(team_wins)   
 main()
